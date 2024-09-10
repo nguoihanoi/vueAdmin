@@ -1,0 +1,22 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = false
+	logallrefupdates = true
+	symlinks = false
+	ignorecase = true
+	sshCommand = ssh -i ~/.ssh/id_rsa_nettuts
+[submodule]
+	active = .
+[remote "origin"]	
+	url = https://github.com/nguoihanoi/vueAdmin.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
+	vscode-merge-base = origin/master
+[user]
+	name = nguoihanoi
+	email = playhard24h@gmail.com
+[branch "main"]
+	vscode-merge-base = origin/main

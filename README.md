@@ -1,1 +1,1 @@
-# vueAdmin
+# vue-admin
