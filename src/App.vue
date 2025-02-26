@@ -3,6 +3,8 @@ import { onBeforeMount } from 'vue'
 import { useColorModes } from '@coreui/vue'
 
 import { useThemeStore } from '@/stores/theme.js'
+//import * as mainWk from '@/stores/worker.js'
+//mainWk.send("data","");
 
 const { isColorModeSet, setColorMode } = useColorModes(
   'coreui-free-vue-admin-template-theme',

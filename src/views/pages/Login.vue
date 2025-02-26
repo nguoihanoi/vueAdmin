@@ -13,20 +13,15 @@
                     <CInputGroupText>
                       <CIcon icon="cil-user" />
                     </CInputGroupText>
-                    <CFormInput
-                      placeholder="Username"
-                      autocomplete="username"
-                    />
+                    <CFormInput placeholder="Username" autocomplete="username" v-model="username"
+                      @keypress="typing = true" @keyup.enter="addTodo($event)" />
                   </CInputGroup>
                   <CInputGroup class="mb-4">
                     <CInputGroupText>
                       <CIcon icon="cil-lock-locked" />
                     </CInputGroupText>
-                    <CFormInput
-                      type="password"
-                      placeholder="Password"
-                      autocomplete="current-password"
-                    />
+                    <CFormInput type="password" placeholder="Password" autocomplete="current-password"
+                      v-model="password" @keypress="typing = true" @keyup.enter="addTodo($event)" />
                   </CInputGroup>
                   <CRow>
                     <CCol :xs="6">
@@ -62,3 +57,44 @@
     </CContainer>
   </div>
 </template>
+<script>
+import { defineComponent } from 'vue'
+import * as mainWk from '@/stores/worker.js';
+const temMain = "userLogin";
+let worker = mainWk.init();
+worker.onmessage = (e) => {
+  console.log(e.data);
+}
+
+export default defineComponent({
+  data() {
+    return {
+      username: "",
+      password: "",
+      typing: false
+    };
+  },
+  methods: {
+    addTodo(event) {
+      if (event) event.preventDefault();
+      mainWk.callApi({
+        cmd: "user_login",
+        body: {
+          user_name: this.username,
+          password: this.password,
+        },
+        template: temMain,
+        userToken: false,
+      });
+    },
+
+    clearTodo() {
+      this.name = "";
+    },
+
+    refreshTodo() {
+      bus.$emit("refreshTodo");
+    }
+  },
+})
+</script>
