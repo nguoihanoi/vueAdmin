@@ -658,7 +658,7 @@ function postApi(inData) {
     redirect: 'follow',
   }
   //
-  fetch('http://localhost:8081/api/post', requestOptions)
+  fetch('https://playhard24h.top/api/post', requestOptions)
     .then((res) => res.json())
     .then((result) => {
       console.log(result)
