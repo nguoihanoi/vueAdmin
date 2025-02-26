@@ -1,5 +1,6 @@
 import { h, resolveComponent } from 'vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
+import { createStore } from 'vuex'
 
 import DefaultLayout from '@/layouts/DefaultLayout'
 
@@ -17,9 +18,10 @@ const routes = [
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () =>
-          import(
-            /* webpackChunkName: "dashboard" */ '@/views/dashboard/Dashboard.vue'
-          ),
+          import(/* webpackChunkName: "dashboard" */ '@/views/dashboard/Dashboard.vue'),
+        meta: {
+          requiresAuth: true,
+        },
       },
       {
         path: '/theme',
@@ -316,4 +318,40 @@ const router = createRouter({
   },
 })
 
+// Create a new store instance.
+const store = createStore({
+  state() {
+    return {
+      isAuthenticated: false,
+    }
+  },
+  mutations: {
+    increment(state) {
+      state.count++
+    },
+  },
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    console.log(localStorage.getItem('userToken'))
+    if (localStorage.getItem('userToken') == null) {
+      next({
+        path: '/pages/login',
+        params: { nextUrl: to.fullPath },
+      })
+    } else {
+      if (!store.state.isAuthenticated) {
+        next({
+          path: '/pages/login',
+          params: { nextUrl: to.fullPath },
+        })
+      } else {
+        next()
+      }
+    }
+  } else {
+    next()
+  }
+})
 export default router
